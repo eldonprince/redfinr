@@ -3,8 +3,6 @@ library(shinydashboard)
 library(readr)
 library(dplyr)
 library(DT)
-library(ggmap)
-library(ggrepel)
 library(leaflet)
 
 # For development purposes
@@ -20,11 +18,12 @@ library(leaflet)
 ui <- dashboardPage(
   dashboardHeader(title = "Home Analyzer"),
   skin = "green",
+  
   dashboardSidebar(
+    includeCSS("www/theme.css"),
     sidebarMenu(
       menuItem("Load Redfin Data", tabName = "data_load", icon = icon("upload")),
       menuItem("Home Analyzer", tabName = "analyzer", icon = icon("map-marker")),
-      actionButton("update", "Update Plot"),
       uiOutput("price_ui"),
       uiOutput("dollar_per_sqft_ui"),
       uiOutput("sqft_ui"),
@@ -55,7 +54,10 @@ ui <- dashboardPage(
               )
       ),
       tabItem(tabName = "analyzer",
-              leafletOutput("plot_map", width = "100%", height = "1200px")
+              actionButton("update", "Update Map", icon = icon("map"), 
+                           style = "color: #fff; background-color: #006d2c"),
+              tags$br(""),
+              leafletOutput("plot_map", width = "100%", height = "800px")
       )
     )
   )
@@ -83,7 +85,7 @@ server <- function(input, output) {
                 min = min(dat()[["price"]], na.rm = TRUE),
                 max = max(dat()[["price"]], na.rm = TRUE),
                 value = c(min(dat()[["price"]], na.rm = TRUE), max(dat()[["price"]], na.rm = TRUE)),
-                step = 5000)
+                step = 1000)
   })
   
   output$dollar_per_sqft_ui <- renderUI({
@@ -92,7 +94,7 @@ server <- function(input, output) {
                 min = min(dat()[["dollar_per_sqft"]], na.rm = TRUE),
                 max = max(dat()[["dollar_per_sqft"]], na.rm = TRUE),
                 value = c(min(dat()[["dollar_per_sqft"]], na.rm = TRUE), max(dat()[["dollar_per_sqft"]], na.rm = TRUE)),
-                step = 5)
+                step = 1)
   })
   
   output$sqft_ui <- renderUI({
@@ -101,7 +103,7 @@ server <- function(input, output) {
                 min = min(dat()[["square_feet"]], na.rm = TRUE),
                 max = max(dat()[["square_feet"]], na.rm = TRUE),
                 value = c(min(dat()[["square_feet"]], na.rm = TRUE), max(dat()[["square_feet"]], na.rm = TRUE)),
-                step = 50)
+                step = 1)
   })
   
   output$sale_type_ui <- renderUI({
@@ -126,20 +128,6 @@ server <- function(input, output) {
   options = list(scrollX = TRUE)
   )
   
-  fetch_map <- reactive({
-    withProgress(message = "fetching map...", value = 0.75, {
-      dats <- dat()
-      left <- min(dats$longitude)
-      right <- max(dats$longitude)
-      bottom <- min(dats$latitude)
-      top <- max(dats$latitude)
-      map_dimensions <- c(left = left, bottom = bottom, right = right, top = top)
-      # map <- get_map(map_dimensions, maptype = "toner", source = "stamen")
-      map <- get_map(map_dimensions)
-    })
-    map
-  })
-  
   observeEvent(input$update, {
     
     dats <- dat()
@@ -152,14 +140,19 @@ server <- function(input, output) {
     
     output$plot_map <- renderLeaflet({
       if (is.null(dat())) return(NULL)
-      pal <- colorBin(c("#a1d99b", "#74c476", "#31a354", "#006d2c"), 
-                      domain = c(min(dats$price), max(dats$price)), bins = 4)
+      pal <- colorBin(c("#a1d99b", "#006d2c"), 
+                      domain = c(min(dats$price), max(dats$price)), bins = 3)
       m <- leaflet(data = dats) %>%
         addProviderTiles(providers$Stamen) %>% 
         addCircleMarkers(lng = dats$longitude, lat = dats$latitude, 
                          label = paste0(round(dats$price/1000), "K"), 
                          stroke = FALSE, radius = 7, fillOpacity = 0.8,
-                         color = ~pal(dats$price))
+                         color = ~pal(dats$price)) %>% 
+        addMiniMap(tiles = providers$Stamen, toggleDisplay = TRUE) %>% 
+        addLegend("bottomright", pal = pal, values = ~ dats$price,
+                  title = "Home Price",
+                  labFormat = labelFormat(prefix = "$"),
+                  opacity = 0.8)
       m 
     })
   })

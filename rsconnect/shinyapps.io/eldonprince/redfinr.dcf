@@ -1,0 +1,13 @@
+name: redfinr
+title: redfinr
+username:
+account: eldonprince
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 348142
+bundleId: 1390542
+url: https://eldonprince.shinyapps.io/redfinr/
+when: 1527148049.62597
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|ToDo.txt

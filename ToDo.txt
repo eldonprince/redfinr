@@ -1,0 +1,8 @@
+Integrate school data
+- Submitted request to greatschools
+
+Integrate census data
+- Decide what to integrate
+- Explore how to integrate
+
+Enhance Leaflet tooltip and presentation
