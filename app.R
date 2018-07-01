@@ -49,7 +49,7 @@ ui <- dashboardPage(
               fluidRow(
                 box(title = "Instructions", width = 5, 
                     tags$li("Go to Redfin.com"),
-                    tags$li("Filter to no more than 350 homes (multiple Redfin files can be loaded into this app)"),
+                    tags$li("Filter to no more than 350 homes (however multiple Redfin files can be loaded into this app)"),
                     tags$li("Click Download All"),
                     img(src = "redfin_download_all.png", 
                         align = "center", width = "100%"),
@@ -67,7 +67,7 @@ ui <- dashboardPage(
       tabItem(tabName = "analyzer",
               fluidRow(
                 uiOutput("plot_map_ui"),
-                numericInput("plot_height", "Map height in pixels", value = 600, min = 300, max = 2400)
+                numericInput("plot_height", "Map height in pixels", value = 800, min = 300, max = 2400)
               )
       )
     )
