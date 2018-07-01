@@ -31,3 +31,20 @@
 .progress-bar {
   background-color: #006d2c;
 }
+
+.leaflet-popup-content-wrapper{
+    opacity: 0.9;
+}
+
+.leaflet-popup-content a:link{
+  color: #006d2c;
+}
+.leaflet-popup-content a:hover{
+  color: #006d2c;
+}
+.leaflet-popup-content a:active{
+  color: #00441b;
+}
+.leaflet-popup-content a:visited{
+  color: #fd8d3c;
+}
