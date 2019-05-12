@@ -1,14 +1,14 @@
 .irs-bar {
-  border-top-color: #006d2c;
-  border-bottom-color: #006d2c;
+  border-top-color: #dd4b39;
+  border-bottom-color: #dd4b39;
 }
 
 .irs-bar-edge {
-  border-color: #006d2c;
+  border-color: #dd4b39;
 }
 
 .irs-single, .irs-bar-edge, .irs-bar, .irs-from, .irs-to {
-  background: #006d2c;
+  background: #dd4b39;
 }
 
 .irs-grid-pol.small {height: 0px;}
@@ -16,20 +16,20 @@
 .irs-grid-text {display: none;}
 
 .selectize-control.multi .selectize-input > div.active {
-  background: #006d2c;
+  background: #dd4b39;
   color: #ffffff;
   border: 0 solid rgba(0, 0, 0, 0);
 }
 
 .selectize-input.focus {
-  border-color: #006d2c;
+  border-color: #dd4b39;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
 .progress-bar {
-  background-color: #006d2c;
+  background-color: #dd4b39;
 }
 
 .leaflet-popup-content-wrapper{
@@ -37,10 +37,10 @@
 }
 
 .leaflet-popup-content a:link{
-  color: #006d2c;
+  color: #dd4b39;
 }
 .leaflet-popup-content a:hover{
-  color: #006d2c;
+  color: #dd4b39;
 }
 .leaflet-popup-content a:active{
   color: #00441b;

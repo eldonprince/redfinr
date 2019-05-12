@@ -20,7 +20,7 @@ library(geosphere)
 
 ui <- dashboardPage(
   dashboardHeader(title = "Home Analyzer"),
-  skin = "green",
+  skin = "red",
   
   dashboardSidebar(
     includeCSS("www/theme.css"),
@@ -29,7 +29,7 @@ ui <- dashboardPage(
       menuItem("Analyze", tabName = "analyzer", icon = icon("home")),
       br(),
       actionButton("update", "Update Map", icon = icon("map"), 
-                   style = "color: #fff; background-color: #006d2c"),
+                   style = "color: #fff; background-color: #dd4b39"),
       selectizeInput("homes_facing", "Homes Facing", choices = c("North", "South", "East", "West", "Unknown"),
                      selected = c("North", "South", "East", "West", "Unknown"), multiple = TRUE),
       uiOutput("price_ui"),
@@ -49,12 +49,8 @@ ui <- dashboardPage(
               fluidRow(
                 box(title = "Instructions", width = 5, 
                     tags$li("Go to Redfin.com"),
-                    tags$li("Filter to no more than 350 homes (however multiple Redfin files can be loaded into this app)"),
+                    tags$li("Filter to desired homes (Redfin can limit download size)"),
                     tags$li("Click Download All"),
-                    img(src = "redfin_download_all.png", 
-                        align = "center", width = "100%"),
-                    br(),
-                    br(),
                     tags$li("Save CSV file(s) to your computer"),
                     br(),
                     fileInput("rfile", "Choose Redfin CSV file(s)",
@@ -213,10 +209,10 @@ server <- function(input, output) {
     
     output$plot_map <- renderLeaflet({
       if (is.null(dat())) return(NULL)
-      pal <- colorBin(c("#762a83", "#1b7837"), 
-                      domain = c(min(dats$price), max(dats$price)), bins = 3)
+      pal <- colorBin(c("#3182bd", "#de2d26"), 
+                      domain = c(min(dats$price), max(dats$price)), pretty = TRUE)
       m <- leaflet(data = dats) %>%
-        addProviderTiles(providers$Stamen) %>% 
+        addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
         addCircleMarkers(lng = dats$longitude, lat = dats$latitude, 
                          label = paste0(round(dats$price/1000), "K"),
                          labelOptions = labelOptions(direction = "top"),
@@ -224,7 +220,7 @@ server <- function(input, output) {
                          popupOptions = popupOptions(closeButton = FALSE),
                          stroke = FALSE, radius = 7, fillOpacity = 0.9,
                          color = ~pal(dats$price)) %>% 
-        addMiniMap(tiles = providers$Stamen, toggleDisplay = TRUE) %>% 
+        addMiniMap(tiles = providers$Esri.NatGeoWorldMap, toggleDisplay = TRUE) %>% 
         addLegend("bottomright", pal = pal, values = ~ dats$price,
                   title = "Home Price",
                   labFormat = labelFormat(prefix = "$"),
